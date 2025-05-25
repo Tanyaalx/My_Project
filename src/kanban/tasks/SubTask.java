@@ -1,6 +1,4 @@
-package kanban;
-
-import java.util.Objects;
+package kanban.tasks;
 
 public class SubTask extends Task {
 
@@ -26,7 +24,7 @@ public class SubTask extends Task {
                 ", description='" + getDescription() + '\'' +
                 ", id=" + getId() +
                 ", status=" + getStatus() +
-                "epicId=" + epicId +
+                ", epicId=" + epicId +
                 '}';
     }
 }

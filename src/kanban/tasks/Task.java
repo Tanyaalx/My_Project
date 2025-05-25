@@ -1,16 +1,13 @@
-package kanban;
+package kanban.tasks;
 
 import java.util.Objects;
 
 public class Task {
     private String name;
-    protected String description;
-    public Integer id;
+    private String description;
+    private Integer id;
     private Status status;
 
-    public Task() {
-
-    }
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;

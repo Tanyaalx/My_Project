@@ -1,20 +1,23 @@
-package kanban;
+package kanban.manager;
+
+import kanban.tasks.Epic;
+import kanban.tasks.Status;
+import kanban.tasks.SubTask;
+import kanban.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class TaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
 
     private Integer count = 1;
 
-    // методы для тасок
     public List<Task> getAllTasks() {
-        List<Task> allTasks = new ArrayList<>(tasks.values());
-        return allTasks;
+        return new ArrayList<>(tasks.values());
     }
 
     public Task addTask(Task newTask) {
@@ -32,30 +35,31 @@ public class TaskManager {
         tasks.clear();
     }
 
-    public Task getTaskById(Integer id) {
-        return tasks.get(id); // создать клон
+    public Task getTaskById(Integer taskId) {
+        Task recievedTask = tasks.get(taskId);
+
+        return new Task(taskId, recievedTask.getName(), recievedTask.getDescription());
     }
 
     public Task updateTask(Task updatedTask) {
         if (tasks.containsKey(updatedTask.getId())) {
             Integer newTaskId = updatedTask.getId();
             Task existingTask = tasks.get(newTaskId);
-            tasks.put(newTaskId, updatedTask);
-//            existingTask.setName(updatedTask.getName());
-//            existingTask.setDescription(updatedTask.getDescription());
-//            existingTask.setStatus(updatedTask.getStatus());
+
+            existingTask.setName(updatedTask.getName());
+            existingTask.setDescription(updatedTask.getDescription());
+            existingTask.setStatus(updatedTask.getStatus());
+            return updatedTask;
         }
-        return updatedTask;
+        return null;
     }
 
     public void deleteTaskById(Integer id) {
         tasks.remove(id);
     }
 
-    // методы для эпиков
     public List<Epic> getAllEpics() {
-        List<Epic> allEpics = new ArrayList<>(epics.values());
-        return allEpics;
+        return new ArrayList<>(epics.values());
     }
 
     public Epic addEpic(Epic newEpic) {
@@ -74,32 +78,33 @@ public class TaskManager {
     }
 
     public Epic getEpicById(Integer id) {
-        return epics.get(id);
+        Epic recievedEpic = epics.get(id);
+
+        return new Epic(id, recievedEpic.getName(), recievedEpic.getDescription());
     }
 
     public void updateEpic(Epic updatedEpic) {
         if (epics.containsKey(updatedEpic.getId())) {
             Integer newEpicId = updatedEpic.getId();
             Epic existingEpic = epics.get(newEpicId);
+
             existingEpic.setName(updatedEpic.getName());
             existingEpic.setDescription(updatedEpic.getDescription());
-
         }
     }
 
     public void deleteEpicById(Integer id) {
-        Epic newEpic = epics.get(id); // получаем ссылку на конкретный эпик
-        if (newEpic != null) { // проверяем что в нем есть сабтаски
-            List<Integer> subTaskIdForNewEpic = newEpic.getSubTasksId(); // получаем список id сабтасок этого эпика
-            for (int i = 0; i < subTaskIdForNewEpic.size(); i++) { // проходимся по нему циклом и по id удаляем из мапы сабтаски
+        Epic newEpic = epics.get(id);
+        if (newEpic != null) {
+            List<Integer> subTaskIdForNewEpic = newEpic.getSubTasksId();
+            for (int i = 0; i < subTaskIdForNewEpic.size(); i++) {
                 subTasks.remove(i);
             }
         }
-        epics.remove(id); // удаляем эпики из мапы
+        epics.remove(id);
 
     }
 
-    // методы для сабтасков
     public SubTask addSubTask(SubTask newSubTask) {
         Integer newSubTaskId = count++;
 
@@ -107,9 +112,9 @@ public class TaskManager {
         subTasks.put(createdSubTask.getId(), createdSubTask);
         newSubTask.setId(newSubTaskId);
 
-        Integer epicId = newSubTask.getEpicId(); // тут надо использовать newSubTask или createdSubTask. есть ли какая-то разница
-        Epic epicForNewSubTask = epics.get(epicId); // ссылка на эпик
-        List<Integer> subTasksIdForEpic = epicForNewSubTask.getSubTasksId(); // получили список сабтасок конкретного эпика
+        Integer epicId = newSubTask.getEpicId();
+        Epic epicForNewSubTask = epics.get(epicId);
+        List<Integer> subTasksIdForEpic = epicForNewSubTask.getSubTasksId();
         subTasksIdForEpic.add(newSubTaskId);
         createdSubTask.setStatus(Status.NEW);
         updateEpicStatus(epicId);
@@ -117,7 +122,6 @@ public class TaskManager {
     }
 
     public void deleteAllSubTasks() {
-        // необходимо также очистить список id сабтасок
         List<Epic> epicsList = new ArrayList<>(epics.values());
         for (Epic epic : epicsList) {
             if (epic != null) {
@@ -129,7 +133,9 @@ public class TaskManager {
     }
 
     public SubTask getSubTaskById(Integer id) {
-        return subTasks.get(id);
+        SubTask recievedSubTask = subTasks.get(id);
+
+        return new SubTask(id, recievedSubTask.getName(), recievedSubTask.getDescription());
     }
 
     public SubTask updateSubTask(SubTask updatedSubTask) {
@@ -149,23 +155,24 @@ public class TaskManager {
     }
 
     public void deleteSubTaskById(Integer id) {
-        SubTask newSubTask = subTasks.get(id);                  // получаем ссылку на сабтаску
-        Integer epicId = newSubTask.getEpicId();               // получаем id эпика этой сабтаски
-        Epic newEpic = epics.get(epicId);                      // получаем ссылку на эпик по идентификатору
-        List<Integer> subTasksIdList = newEpic.getSubTasksId(); // получаем список id сабтасок этого эпика
-        subTasksIdList.remove(id);                              // удаляем из листа id сабтаски
-        subTasks.remove(id);                                    // удаляем из мапы
+        SubTask newSubTask = subTasks.get(id);
+        Integer epicId = newSubTask.getEpicId();
+        Epic newEpic = epics.get(epicId);
+        List<Integer> subTasksIdList = newEpic.getSubTasksId();
+        subTasksIdList.remove(id);
+        subTasks.remove(id);
+        updateEpicStatus(epicId);
     }
 
     public List<SubTask> getSubTasksByEpicId(Integer epicId) {
-        List<SubTask> allSubTasksForEpic = new ArrayList<>();        // создаем список для ссылок сабтасок этого эпика
+        List<SubTask> allSubTasksForEpic = new ArrayList<>();
 
-        Epic newEpic = epics.get(epicId);                           // получаем ссылку на эпик по идентификатору и проверяем что эпик не пустой
+        Epic newEpic = epics.get(epicId);
         if (newEpic != null) {
-            List<Integer> subTasksIdForEpic = newEpic.getSubTasksId(); // получаем список с id сабтасок для этого эпика
-            for (Integer subTaskId : subTasksIdForEpic) {               // проходимся по нему циклом и находим по id ссылку на эту сабтаску в мапе
+            List<Integer> subTasksIdForEpic = newEpic.getSubTasksId();
+            for (Integer subTaskId : subTasksIdForEpic) {
                 SubTask newSubTask = subTasks.get(subTaskId);
-                allSubTasksForEpic.add(newSubTask);                    // добавляем ссылку на сабтаску в список
+                allSubTasksForEpic.add(newSubTask);
             }
         }
 
