@@ -146,6 +146,7 @@ public class TaskManager {
             existingSubTask.setName(updatedSubTask.getName());
             existingSubTask.setDescription(updatedSubTask.getDescription());
             existingSubTask.setStatus(updatedSubTask.getStatus());
+            existingSubTask.setEpicId(updatedSubTask.getEpicId());
 
             updateEpicStatus(existingSubTask.getEpicId());
 
