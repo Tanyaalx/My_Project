@@ -1,0 +1,12 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Компилированные файлы
+*.class
+
+# Build output
+out/
+
+# Логи
+*.log
