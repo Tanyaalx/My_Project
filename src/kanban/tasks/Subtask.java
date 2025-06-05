@@ -1,15 +1,22 @@
 package kanban.tasks;
 
-public class SubTask extends Task {
+public class Subtask extends Task {
 
     private Integer epicId;
-    public SubTask(String name, String description, Integer epicId, Status status) {
+
+    public Subtask(String name, String description, Integer epicId, Status status) {
         super(name, description, status);
         this.epicId = epicId;
     }
 
-    public SubTask(Integer id, String name, String description) {
+    public Subtask(Integer id, String name, String description, Integer epicId) {
         super(id, name, description);
+        this.epicId = epicId;
+    }
+
+    public Subtask(Integer id, String name, String description, Status status, Integer epicId) {
+        super(id, name, description, status);
+        this.epicId = epicId;
     }
 
     public Integer getEpicId() {
@@ -22,7 +29,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{" +
+        return "Subtask{" +
                 "name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", id=" + getId() +
