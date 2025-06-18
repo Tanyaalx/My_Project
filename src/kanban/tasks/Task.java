@@ -1,16 +1,20 @@
-package kanban;
+package kanban.tasks;
 
 import java.util.Objects;
 
 public class Task {
     private String name;
-    protected String description;
-    public Integer id;
+    private String description;
+    private Integer id;
     private Status status;
 
-    public Task() {
-
+    public Task(Integer id, String name, String description, Status status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
+
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
@@ -39,7 +43,7 @@ public class Task {
         this.description = description;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
