@@ -104,8 +104,8 @@ public class TaskManager {
         Epic deleteEpic = epics.get(id);
         if (deleteEpic != null) {
             List<Integer> epicSubTasksId = deleteEpic.getSubtasksId();
-            for (int i = 0; i < epicSubTasksId.size(); i++) {
-                subtasks.remove(i);
+            for (Integer subtaskId : epicSubTasksId) {
+                subtasks.remove(subtaskId);
             }
         }
         epics.remove(id);

@@ -40,6 +40,7 @@ public class Main {
         taskManager.updateSubtask(subtask3);
         taskManager.updateEpic(epic1);
         taskManager.updateEpic(epic2);
+        taskManager.deleteEpicById(epic1.getId());
 
         System.out.println("Список задач: " + taskManager.getAllTasks());
         System.out.println("Список эпиков: " + taskManager.getAllEpics());
