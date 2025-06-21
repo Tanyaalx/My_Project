@@ -1,5 +1,8 @@
 package kanban.main;
 
+import kanban.manager.InMemoryHistoryManager;
+import kanban.manager.InMemoryTaskManager;
+import kanban.manager.Managers;
 import kanban.manager.TaskManager;
 import kanban.tasks.Epic;
 import kanban.tasks.Status;
@@ -8,7 +11,7 @@ import kanban.tasks.Task;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
 
         Task task1 = new Task("task1", "description 1", Status.NEW);
@@ -16,11 +19,17 @@ public class Main {
 
         taskManager.addTask(task1);
         taskManager.addTask(task2);
+        taskManager.getTaskById(task1.getId());
+        taskManager.getTaskById(task1.getId());
+        taskManager.getTaskById(task2.getId());
+        taskManager.getTaskById(task2.getId());
 
         Epic epic1 = new Epic("epic1", "description 1");
         Epic epic2 = new Epic("epic2", "description 2");
         taskManager.addEpic(epic1);
         taskManager.addEpic(epic2);
+        taskManager.getEpicById(epic1.getId());
+        taskManager.getEpicById(epic2.getId());
 
         Subtask subtask1 = new Subtask("subtask1", "description 1", epic1.getId(), Status.NEW);
         Subtask subtask2 = new Subtask("subtask2", "description 2", epic1.getId(), Status.IN_PROGRESS);
@@ -29,6 +38,12 @@ public class Main {
         taskManager.addSubtask(subtask1);
         taskManager.addSubtask(subtask2);
         taskManager.addSubtask(subtask3);
+        taskManager.getSubtaskById(subtask1.getId());
+        taskManager.getSubtaskById(subtask2.getId());
+        taskManager.getSubtaskById(subtask3.getId());
+        taskManager.getSubtaskById(subtask3.getId());
+        taskManager.getSubtaskById(subtask1.getId());
+        taskManager.getHistory();
 
         System.out.println("Список задач: " + taskManager.getAllTasks());
         System.out.println("Список эпиков: " + taskManager.getAllEpics());
