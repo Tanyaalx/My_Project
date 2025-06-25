@@ -1,6 +1,9 @@
 package kanban.manager;
 
-public class Managers {
+public final class Managers {
+
+    private Managers() {
+    }
 
     public static TaskManager getDefault() {
         HistoryManager historyManager = getDefaultHistory();

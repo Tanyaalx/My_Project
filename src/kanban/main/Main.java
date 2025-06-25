@@ -1,7 +1,5 @@
 package kanban.main;
 
-import kanban.manager.InMemoryHistoryManager;
-import kanban.manager.InMemoryTaskManager;
 import kanban.manager.Managers;
 import kanban.manager.TaskManager;
 import kanban.tasks.Epic;
@@ -43,7 +41,7 @@ public class Main {
         taskManager.getSubtaskById(subtask3.getId());
         taskManager.getSubtaskById(subtask3.getId());
         taskManager.getSubtaskById(subtask1.getId());
-        taskManager.getHistory();
+        System.out.println("История: " + taskManager.getHistory());
 
         System.out.println("Список задач: " + taskManager.getAllTasks());
         System.out.println("Список эпиков: " + taskManager.getAllEpics());
