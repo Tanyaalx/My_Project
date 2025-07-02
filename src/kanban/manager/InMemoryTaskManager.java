@@ -33,7 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
         newTask.setId(newTaskId);
 
         Task createdTask = new Task(newTaskId, newTask.getName(), newTask.getDescription(), newTask.getStatus());
-        tasks.put(createdTask.getId(), createdTask);
+        tasks.put(newTaskId, createdTask);
 
         return newTask;
     }
@@ -143,13 +143,13 @@ public class InMemoryTaskManager implements TaskManager {
         newSubtask.setId(newSubtaskId);
         Integer epicId = newSubtask.getEpicId();
 
-        Subtask createdSubtask = new Subtask(newSubtaskId, newSubtask.getName(), newSubtask.getDescription(), epicId);
+        Subtask createdSubtask = new Subtask(newSubtaskId, newSubtask.getName(), newSubtask.getDescription(),
+                newSubtask.getStatus(), epicId);
         subtasks.put(newSubtaskId, createdSubtask);
 
         Epic existingEpic = epics.get(epicId);
         List<Integer> epicSubtasksId = existingEpic.getSubtasksId();
         epicSubtasksId.add(newSubtaskId);
-        createdSubtask.setStatus(Status.NEW);
         updateEpicStatus(epicId);
         return newSubtask;
     }
@@ -173,10 +173,12 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtasks.containsKey(id)) {
             Subtask recievedSubtask = subtasks.get(id);
 
-                Subtask subtaskForHistory = new Subtask(id, recievedSubtask.getName(), recievedSubtask.getDescription(), recievedSubtask.getStatus(), recievedSubtask.getEpicId());
+                Subtask subtaskForHistory = new Subtask(id, recievedSubtask.getName(), recievedSubtask.getDescription(),
+                        recievedSubtask.getStatus(), recievedSubtask.getEpicId());
                 historyManager.addToHistory(subtaskForHistory);
 
-            return new Subtask(id, recievedSubtask.getName(), recievedSubtask.getDescription(), recievedSubtask.getStatus(), recievedSubtask.getEpicId());
+            return new Subtask(id, recievedSubtask.getName(), recievedSubtask.getDescription(),
+                    recievedSubtask.getStatus(), recievedSubtask.getEpicId());
         }
         return null;
     }
@@ -219,7 +221,8 @@ public class InMemoryTaskManager implements TaskManager {
             List<Integer> epicSubtasksIds = existingEpic.getSubtasksId();
             for (Integer subtaskId : epicSubtasksIds) {
                 Subtask existingSubtask = subtasks.get(subtaskId);
-                Subtask userSubtask = new Subtask(subtaskId, existingSubtask.getName(), existingSubtask.getDescription(), existingSubtask.getStatus(), existingSubtask.getEpicId());
+                Subtask userSubtask = new Subtask(subtaskId, existingSubtask.getName(), existingSubtask.getDescription(),
+                        existingSubtask.getStatus(), existingSubtask.getEpicId());
                 allEpicSubtasks.add(userSubtask);
             }
         }
