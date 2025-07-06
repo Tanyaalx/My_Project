@@ -22,8 +22,8 @@ public class Main {
         taskManager.getTaskById(task2.getId());
         taskManager.getTaskById(task2.getId());
 
-        Epic epic1 = new Epic("epic1", "description 1");
-        Epic epic2 = new Epic("epic2", "description 2");
+        Epic epic1 = new Epic("epic1", "description 1", Status.NEW);
+        Epic epic2 = new Epic("epic2", "description 2", Status.NEW);
         taskManager.addEpic(epic1);
         taskManager.addEpic(epic2);
         taskManager.getEpicById(epic1.getId());
